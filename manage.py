@@ -4,6 +4,7 @@
 import os
 import unittest
 import coverage
+import random 
 
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
@@ -19,7 +20,15 @@ COV = coverage.coverage(
 )
 COV.start()
 
-from project.server import app, db, models
+from project.server import app, db
+from project.server.models.User import User
+from project.server.models.Subscriber import Subscriber
+from project.server.models.Donor import Donor
+from project.server.models.Hospital import Hospital
+from project.server.models.Transfusion import Transfusion
+from project.server.models.Donation import Donation
+from project.server.models.Deferral import Deferral
+from project.server import generate_data
 
 migrate = Migrate(app, db)
 manager = Manager(app)
@@ -37,6 +46,26 @@ def test():
         return 0
     return 1
 
+@manager.command
+def populate_db():
+    hospital_ids = []
+    sub_ids = []
+    don_ids = []
+    for _ in range(5):
+         hospital_ids.append(generate_data.hospital())
+    for _ in range(random.randint(10, 15)):
+        if len(don_ids) > 0:
+            don_ids.append(generate_data.donor(random.choice(don_ids), random.choice(hospital_ids)))
+        else:
+            don_ids.append(generate_data.donor(None, random.choice(hospital_ids)))
+    for _ in range(random.randint(10, 15)):
+        sub_ids.append(generate_data.subscriber(random.choice(hospital_ids)))
+    for _ in range(random.randint(3, 7)):
+        generate_data.transfusion(random.choice(hospital_ids), random.choice(sub_ids))
+    for _ in range(random.randint(50, 80)):
+        generate_data.donation(random.choice(hospital_ids), random.choice(don_ids))
+    for _ in range(random.randint(2, 5)):
+        generate_data.defferal(random.choice(don_ids))
 
 @manager.command
 def cov():
@@ -62,6 +91,22 @@ def create_db():
     """Creates the db tables."""
     db.create_all()
 
+@manager.command
+def add_admin():
+    """Adds first admin here"""
+    email = input("enter email(required): ")
+    name = input("enter name:")
+    password = input("enter password(required): ")
+
+    user = User(
+                    email=email,
+                    name=name,
+                    password=password,
+                    admin=True
+                )
+    db.session.add(user)
+    db.session.commit()
+    
 
 @manager.command
 def drop_db():
