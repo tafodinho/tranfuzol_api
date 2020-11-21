@@ -63,6 +63,7 @@ class LoginAPI(MethodView):
             user = User.query.filter_by(
                 email=post_data.get('email')
             ).first()
+            print("USER", user, post_data)
             if user and bcrypt.check_password_hash(
                 user.password, post_data.get('password')
             ):
