@@ -77,3 +77,4 @@ With coverage:
 ```sh
 $ python manage.py cov
 ```
+# tranfuzol_api

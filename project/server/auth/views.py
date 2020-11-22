@@ -5,7 +5,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 
 from project.server import bcrypt, db
-from project.server.models import User, BlacklistToken
+from project.server.models.User import User, BlacklistToken
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -24,7 +24,9 @@ class RegisterAPI(MethodView):
             try:
                 user = User(
                     email=post_data.get('email'),
-                    password=post_data.get('password')
+                    name=post_data.get('name'),
+                    password=post_data.get('password'),
+                    admin=post_data.get('admin')
                 )
                 # insert the user
                 db.session.add(user)
@@ -33,11 +35,11 @@ class RegisterAPI(MethodView):
                 auth_token = user.encode_auth_token(user.id)
                 responseObject = {
                     'status': 'success',
-                    'message': 'Successfully registered.',
-                    'auth_token': auth_token.decode()
+                    'data': user._asdict()
                 }
-                return make_response(jsonify(responseObject)), 201
+                return make_response(jsonify(responseObject)), 200
             except Exception as e:
+                print(e)
                 responseObject = {
                     'status': 'fail',
                     'message': 'Some error occurred. Please try again.'
@@ -58,6 +60,7 @@ class LoginAPI(MethodView):
     def post(self):
         # get the post data
         post_data = request.get_json()
+        print(post_data)
         try:
             # fetch the user data
             user = User.query.filter_by(
@@ -89,10 +92,55 @@ class LoginAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 500
 
-
-class UserAPI(MethodView):
+class AdminAPI(MethodView):
     """
-    User Resource
+    Admin Resource
+    """
+    def get(self):
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            try:
+                auth_token = auth_header.split(" ")[1]
+            except IndexError:
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'Bearer token malformed.'
+                }
+                return make_response(jsonify(responseObject)), 401
+        else:
+            auth_token = ''
+        if auth_token:
+            resp = User.decode_auth_token(auth_token)
+            print("AUTH", resp)
+            if not isinstance(resp, str):
+                trans_arr = []
+                admins = User.query.all()
+                for i in range(len(admins)):
+                    trans_arr.append(admins[i]._asdict())
+
+                responseObject = {
+                    'status': 'success',
+                    'data': trans_arr
+                }
+                return make_response(jsonify(responseObject)), 200
+            responseObject = {
+                'status': 'fail',
+                'message': resp
+            }
+            return make_response(jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Provide a valid auth token.'
+            }
+            return make_response(jsonify(responseObject)), 401
+
+    def delete(self):
+       """ delete goes here """
+
+class AdminItemAPI(MethodView):
+    """
+    Admin Item Resource
     """
     def get(self):
         # get the auth token
@@ -112,14 +160,10 @@ class UserAPI(MethodView):
             resp = User.decode_auth_token(auth_token)
             if not isinstance(resp, str):
                 user = User.query.filter_by(id=resp).first()
+                user = user._asdict()
                 responseObject = {
                     'status': 'success',
-                    'data': {
-                        'user_id': user.id,
-                        'email': user.email,
-                        'admin': user.admin,
-                        'registered_on': user.registered_on
-                    }
+                    'data': user
                 }
                 return make_response(jsonify(responseObject)), 200
             responseObject = {
@@ -133,7 +177,98 @@ class UserAPI(MethodView):
                 'message': 'Provide a valid auth token.'
             }
             return make_response(jsonify(responseObject)), 401
+    def put(self):
+        """ put an item here """
 
+        # check if user already exists
+        auth_header = request.headers.get('Authorization')
+        # get the post data
+        post_data = request.json
+        print("JSON DATA", post_data)
+        if auth_header:
+            try:
+                auth_token = auth_header.split(" ")[1]
+            except IndexError:
+
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'Bearer token malformed.'
+                }
+                return make_response(jsonify(responseObject)), 401
+        else:
+            auth_token = ''
+        if auth_token:
+            resp = User.decode_auth_token(auth_token)
+            if not isinstance(resp, str):
+                admin = User.query.filter_by(id=post_data['id']).first()
+
+                admin.email = post_data["email"]
+                admin.name = post_data["name"]
+                admin.password = admin.encrypt_password(post_data["password"])
+                admin.admin = post_data["admin"]
+
+                db.session.add(admin)
+                db.session.commit()
+                data = admin._asdict()
+                responseObject = {
+                    'status': 'success',
+                    'data': data
+                }
+                return make_response(jsonify(responseObject)), 200
+            responseObject = {
+                'status': 'fail',
+                'message': resp
+            }
+            return make_response(jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Provide a valid auth token.'
+            }
+            return make_response(jsonify(responseObject)), 401
+    def patch(self):
+        """ update an item here """
+    def delete(self):
+        """ delete an item here """
+         # check if user already exists
+        auth_header = request.headers.get('Authorization')
+        # get the post data
+        post_data = request.json
+        print("JSON DATA", post_data)
+        if auth_header:
+            try:
+                auth_token = auth_header.split(" ")[1]
+            except IndexError:
+
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'Bearer token malformed.'
+                }
+                return make_response(jsonify(responseObject)), 401
+        else:
+            auth_token = ''
+        if auth_token:
+            resp = User.decode_auth_token(auth_token)
+            if not isinstance(resp, str):
+                admin = User.query.filter_by(id=post_data['id']).first()
+                db.session.delete(admin)
+                db.session.commit()
+            
+                responseObject = {
+                    'status': 'success',
+                }
+                return make_response(jsonify(responseObject)), 200
+            responseObject = {
+                'status': 'fail',
+                'message': resp
+            }
+            return make_response(jsonify(responseObject)), 401
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Provide a valid auth token.'
+            }
+            return make_response(jsonify(responseObject)), 401
 
 class LogoutAPI(MethodView):
     """
@@ -182,24 +317,30 @@ class LogoutAPI(MethodView):
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
 login_view = LoginAPI.as_view('login_api')
-user_view = UserAPI.as_view('user_api')
+admin_api = AdminAPI.as_view('amdin_item_api')
+admin_item_api = AdminItemAPI.as_view('admin_item_api')
 logout_view = LogoutAPI.as_view('logout_api')
 
 # add Rules for API Endpoints
 auth_blueprint.add_url_rule(
-    '/auth/register',
+    '/api/auth/register',
     view_func=registration_view,
     methods=['POST']
 )
 auth_blueprint.add_url_rule(
-    '/auth/login',
+    '/api/auth/login',
     view_func=login_view,
     methods=['POST']
 )
 auth_blueprint.add_url_rule(
-    '/auth/status',
-    view_func=user_view,
-    methods=['GET']
+    '/api/admins',
+    view_func=admin_api,
+    methods=['GET', 'DELETE']
+)
+auth_blueprint.add_url_rule(
+    '/api/admin_item',
+    view_func=admin_item_api,
+    methods=['POST', 'GET', 'PUT', 'PATCH', 'DELETE']
 )
 auth_blueprint.add_url_rule(
     '/auth/logout',

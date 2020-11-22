@@ -20,4 +20,17 @@ bcrypt = Bcrypt(app)
 db = SQLAlchemy(app)
 
 from project.server.auth.views import auth_blueprint
+from project.server.api.donor import donor_blueprint
+from project.server.api.subscriber import subscriber_blueprint
+from project.server.api.hospital import hospital_blueprint
+from project.server.api.transfusion import transfusion_blueprint
+from project.server.api.donation import donation_blueprint
+from project.server.api.deferral import deferral_blueprint
+
 app.register_blueprint(auth_blueprint)
+app.register_blueprint(donor_blueprint)
+app.register_blueprint(subscriber_blueprint)
+app.register_blueprint(hospital_blueprint)
+app.register_blueprint(transfusion_blueprint)
+app.register_blueprint(donation_blueprint)
+app.register_blueprint(deferral_blueprint)

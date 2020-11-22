@@ -6,7 +6,7 @@ import json
 import unittest
 
 from project.server import db
-from project.server.models import User, BlacklistToken
+from project.server.models.User import User, BlacklistToken
 from project.tests.base import BaseTestCase
 
 
