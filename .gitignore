@@ -12,6 +12,7 @@ __pycache__
 env.sh
 migrations
 *.idea
+logs.txt
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
