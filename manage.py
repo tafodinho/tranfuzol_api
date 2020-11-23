@@ -20,7 +20,7 @@ COV = coverage.coverage(
 )
 COV.start()
 
-from project.server import app, db
+from project.server import app as application, db
 from project.server.models.User import User
 from project.server.models.Subscriber import Subscriber
 from project.server.models.Donor import Donor
@@ -30,8 +30,8 @@ from project.server.models.Donation import Donation
 from project.server.models.Deferral import Deferral
 from project.server import generate_data
 
-migrate = Migrate(app, db)
-application = manager = Manager(app)
+migrate = Migrate(application, db)
+application = manager = Manager(application)
 
 # migrations
 manager.add_command('db', MigrateCommand)
