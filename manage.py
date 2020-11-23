@@ -31,7 +31,7 @@ from project.server.models.Deferral import Deferral
 from project.server import generate_data
 
 migrate = Migrate(app, db)
-manager = Manager(app)
+application = manager = Manager(app)
 
 # migrations
 manager.add_command('db', MigrateCommand)
