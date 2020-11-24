@@ -2,8 +2,8 @@
 
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-postgres_local_base = 'postgresql://postgres:barister@localhost/'
-database_name = 'transfuzol'
+postgres_local_base = 'postgresql://postgres:postgres1234@localhost/'
+database_name = ' aapp4g8vs5kgg'
 
 
 class BaseConfig:
@@ -34,4 +34,4 @@ class ProductionConfig(BaseConfig):
     """Production configuration."""
     SECRET_KEY = 'my_precious'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql:///postgres:postgres1234@localhost/aa1t5m4tfjuxxws'
+    SQLALCHEMY_DATABASE_URI = 'postgresql:///postgres:postgres1234@localhost/aapp4g8vs5kgg'
