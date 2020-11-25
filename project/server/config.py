@@ -2,8 +2,20 @@
 
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
-postgres_local_base = 'postgresql://postgres:postgres1234@localhost/'
-database_name = ' aapp4g8vs5kgg'
+database_name = 'transfuzol'
+
+if 'RDS_DB_NAME' in os.environ:
+    DB_NAME = os.environ['RDS_DB_NAME']
+    DB_USER = os.environ['RDS_USERNAME']
+    DB_PASSWORD = os.environ['RDS_PASSWORD']
+    DB_HOST = os.environ['RDS_HOSTNAME']
+    DB_PORT = os.environ['RDS_PORT']
+else:
+    DB_NAME = 'transfuzol'
+    DB_USER = 'postgres'
+    DB_PASSWORD = 'barister'
+    DB_HOST = 'localhost'
+    DB_PORT = '5432'
 
 
 class BaseConfig:
@@ -12,21 +24,18 @@ class BaseConfig:
     DEBUG = False
     BCRYPT_LOG_ROUNDS = 13
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-
+    SQLALCHEMY_DATABASE_URI = 'postgresql://' + DB_USER + ':' + DB_PASSWORD + '@' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
     DEBUG = True
     BCRYPT_LOG_ROUNDS = 4
-    SQLALCHEMY_DATABASE_URI = postgres_local_base + database_name
-
 
 class TestingConfig(BaseConfig):
     """Testing configuration."""
     DEBUG = True
     TESTING = True
     BCRYPT_LOG_ROUNDS = 4
-    SQLALCHEMY_DATABASE_URI = postgres_local_base + database_name + '_test'
     PRESERVE_CONTEXT_ON_EXCEPTION = False
 
 
@@ -34,4 +43,3 @@ class ProductionConfig(BaseConfig):
     """Production configuration."""
     SECRET_KEY = 'my_precious'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql:///postgres:postgres1234@localhost/aapp4g8vs5kgg'
