@@ -1,4 +1,4 @@
-from project.server.app import app, db, bcrypt
+from project.server import app, db, bcrypt
 from sqlalchemy import Column, Date, Integer, Text, create_engine, inspect
 
 DONOR_MATCH = {

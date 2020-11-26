@@ -20,7 +20,7 @@ COV = coverage.coverage(
 )
 COV.start()
 
-from project.server.app import app as application, db
+from project.server import app as application, db
 from project.server.models.User import User
 from project.server.models.Subscriber import Subscriber
 from project.server.models.Donor import Donor

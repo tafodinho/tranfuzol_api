@@ -1,5 +1,5 @@
 
-from project.server.app import app, db, bcrypt
+from project.server import app, db, bcrypt
 
 class Hospital(db.Model):
 

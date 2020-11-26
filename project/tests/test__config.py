@@ -6,7 +6,7 @@ import unittest
 from flask import current_app
 from flask_testing import TestCase
 
-from project.server.app import app
+from project.server import app
 
 
 class TestDevelopmentConfig(TestCase):
