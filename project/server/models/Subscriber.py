@@ -1,4 +1,4 @@
-from project.server import app, db, bcrypt
+from project.server.app import app, db, bcrypt
 from sqlalchemy import Column, Date, Integer, Text, create_engine, inspect
 
 DONOR_MATCH = {
@@ -40,6 +40,7 @@ class Subscriber(db.Model):
     blood_group = db.Column(db.String(100))
     rhesus_factor = db.Column(db.String(100))
     allergies = db.Column(db.String(100))
+    method_of_payment = 
     active = db.Column(db.Boolean(), default=True)
     created_at = db.Column(db.DateTime, default=db.func.now())
     updated_at = db.Column(db.DateTime, default=db.func.now())

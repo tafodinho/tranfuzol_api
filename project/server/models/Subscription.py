@@ -1,5 +1,5 @@
 
-from project.server import app, db, bcrypt
+from project.server.app import app, db, bcrypt
 from sqlalchemy.ext.hybrid import hybrid_method
 
 class Donation(db.Model):
@@ -8,6 +8,8 @@ class Donation(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     subscriber_id = db.Column(db.Integer, db.ForeignKey('subscribers.id'), nullable=False)
+    amount = db.Column(db.Integer)
+    date_of_expiration = db.Column(db.DateTime())
 
     volume_of_blood = db.Column(db.Integer)
     onset_time = db.Column(db.DateTime())

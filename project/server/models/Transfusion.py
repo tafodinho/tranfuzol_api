@@ -1,5 +1,5 @@
 
-from project.server import app, db, bcrypt
+from project.server.app import app, db, bcrypt
 
 class Transfusion(db.Model):
 
