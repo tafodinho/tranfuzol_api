@@ -274,6 +274,9 @@ class LogoutAPI(MethodView):
     """
     Logout Resource
     """
+    def get(self):
+        """ get things """
+
     def post(self):
         # get auth token
         auth_header = request.headers.get('Authorization')
