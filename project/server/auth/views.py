@@ -274,8 +274,6 @@ class LogoutAPI(MethodView):
     """
     Logout Resource
     """
-    def get(self):
-        """ get things """
 
     def post(self):
         # get auth token
@@ -333,7 +331,7 @@ auth_blueprint.add_url_rule(
 auth_blueprint.add_url_rule(
     '/api/auth/login',
     view_func=login_view,
-    methods=['POST', 'GET']
+    methods=['POST']
 )
 auth_blueprint.add_url_rule(
     '/api/admins',
