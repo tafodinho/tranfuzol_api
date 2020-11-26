@@ -5,7 +5,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 database_name = 'transfuzol'
 
 if 'RDS_DB_NAME' in os.environ:
-    DB_NAME = "database1"
+    DB_NAME = "aahydh7eoz4oe2"
     DB_USER = os.environ['RDS_USERNAME']
     DB_PASSWORD = os.environ['RDS_PASSWORD']
     DB_HOST = os.environ['RDS_HOSTNAME']
