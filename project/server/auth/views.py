@@ -330,7 +330,7 @@ auth_blueprint.add_url_rule(
 auth_blueprint.add_url_rule(
     '/api/auth/login',
     view_func=login_view,
-    methods=['POST']
+    methods=['POST', 'GET']
 )
 auth_blueprint.add_url_rule(
     '/api/admins',
