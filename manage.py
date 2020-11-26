@@ -92,11 +92,11 @@ def create_db():
     db.create_all()
 
 @manager.command
-def add_admin():
+def add_super_admin():
     """Adds first admin here"""
-    email = input("enter email(required): ")
-    name = input("enter name:")
-    password = input("enter password(required): ")
+    email = "tafodinho@gmail.com"
+    name = "Tafang Joshua"
+    password = "Hacker@101"
 
     user = User(
                     email=email,
