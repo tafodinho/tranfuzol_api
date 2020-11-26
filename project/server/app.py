@@ -1,2 +1,1 @@
-from project.server import create_app
-application = create_app()
+from project.server import app as application
