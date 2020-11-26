@@ -4,6 +4,7 @@ venv
 temp
 tmp
 test/*
+.ebextensions/*
 __pycache__
 
 *.pyc
