@@ -3,6 +3,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 from sqlalchemy import inspect
 import datetime
+import json
 
 from project.server import bcrypt, db
 from project.server.models.Donor import Donor
@@ -27,12 +28,11 @@ class DeferralAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
             resp = User.decode_auth_token(auth_token)
-            print("AUTH", resp)
             if not isinstance(resp, str):
                 deff_arr = []
                 deferrals = Deferral.query.all()
@@ -44,18 +44,18 @@ class DeferralAPI(MethodView):
                     'status': 'success',
                     'data': deff_arr
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
     def delete(self):
        """ delete goes here """
@@ -72,7 +72,6 @@ class DeferralItemAPI(MethodView):
         auth_header = request.headers.get('Authorization')
         # get the post data
         post_data = request.json
-        print("JSON DATA", post_data)
         if auth_header:
             try:
                 auth_token = auth_header.split(" ")[1]
@@ -82,7 +81,7 @@ class DeferralItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -103,18 +102,18 @@ class DeferralItemAPI(MethodView):
                     'status': 'success',
                     'data': data
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         
     def get(self):
         """ get an by id """
@@ -130,14 +129,14 @@ class DeferralItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
             resp = User.decode_auth_token(auth_token)
             if not isinstance(resp, str):
                 deferral = Deferral().query.filter(Deferral.c.id == post_data['id']).first()
-                data = defferral._asdict()
+                data = deferral._asdict()
                 data['donor'] = deferral.donor._asdict()
                 if deferral:
                     responseObject = {
@@ -145,24 +144,24 @@ class DeferralItemAPI(MethodView):
                         'message': 'deferral found',
                         'data': data
                     }
-                    return make_response(jsonify(responseObject)), 200
+                    return make_response(json.dumps(responseObject, default=str)), 200
                 else:
                     responseObject = {
                         'status': 'fail',
                         'message': 'deferral not found'
                     }
-                    return make_response(jsonify(responseObject)), 402
+                    return make_response(json.dumps(responseObject, default=str)), 402
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
     def put(self):
         """ put an item here """
@@ -171,7 +170,6 @@ class DeferralItemAPI(MethodView):
         auth_header = request.headers.get('Authorization')
         # get the post data
         post_data = request.json
-        print("JSON DATA", post_data)
         if auth_header:
             try:
                 auth_token = auth_header.split(" ")[1]
@@ -181,7 +179,7 @@ class DeferralItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -203,18 +201,18 @@ class DeferralItemAPI(MethodView):
                     'status': 'success',
                     'data': data
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
     def patch(self):
         """ update an item here """
 
@@ -224,7 +222,6 @@ class DeferralItemAPI(MethodView):
         auth_header = request.headers.get('Authorization')
         # get the post data
         post_data = request.json
-        print("JSON DATA", post_data)
         if auth_header:
             try:
                 auth_token = auth_header.split(" ")[1]
@@ -234,7 +231,7 @@ class DeferralItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -247,18 +244,18 @@ class DeferralItemAPI(MethodView):
                 responseObject = {
                     'status': 'success',
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
 # define the API resources
 deferrals_api = DeferralAPI.as_view('deferrals_api')

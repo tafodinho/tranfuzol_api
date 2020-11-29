@@ -3,6 +3,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 from sqlalchemy import inspect
 import datetime
+import json
 
 from project.server import bcrypt, db
 from project.server.models.Subscriber import Subscriber
@@ -26,12 +27,11 @@ class SubscriberAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
             resp = User.decode_auth_token(auth_token)
-            print("AUTH", resp)
             if not isinstance(resp, str):
                 sub_arr = []
                 subscribers = Subscriber.query.all()
@@ -42,18 +42,18 @@ class SubscriberAPI(MethodView):
                     'status': 'success',
                     'data': sub_arr
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
     def delete(self):
        """ delete goes here """
@@ -70,7 +70,6 @@ class SubscriberItemAPI(MethodView):
         auth_header = request.headers.get('Authorization')
         # get the post data
         post_data = request.json
-        print("JSON DATA", post_data)
         if auth_header:
             try:
                 auth_token = auth_header.split(" ")[1]
@@ -80,7 +79,7 @@ class SubscriberItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -119,18 +118,18 @@ class SubscriberItemAPI(MethodView):
                     'status': 'success',
                     'data': data
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         
     def get(self):
         """ get an by id """
@@ -146,7 +145,7 @@ class SubscriberItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -159,24 +158,24 @@ class SubscriberItemAPI(MethodView):
                         'message': 'subscriber found',
                         'data': subscriber._return_data()
                     }
-                    return make_response(jsonify(responseObject)), 200
+                    return make_response(json.dumps(responseObject, default=str)), 200
                 else:
                     responseObject = {
                         'status': 'fail',
                         'message': 'subscriber not found'
                     }
-                    return make_response(jsonify(responseObject)), 402
+                    return make_response(json.dumps(responseObject, default=str)), 402
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
     def put(self):
         """ put an item here """
@@ -185,7 +184,6 @@ class SubscriberItemAPI(MethodView):
         auth_header = request.headers.get('Authorization')
         # get the post data
         post_data = request.json
-        print("JSON DATA", post_data)
         if auth_header:
             try:
                 auth_token = auth_header.split(" ")[1]
@@ -195,7 +193,7 @@ class SubscriberItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -233,18 +231,18 @@ class SubscriberItemAPI(MethodView):
                     'status': 'success',
                     'data': data
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
     def patch(self):
         """ update an item here """
     def delete(self):
@@ -253,7 +251,6 @@ class SubscriberItemAPI(MethodView):
         auth_header = request.headers.get('Authorization')
         # get the post data
         post_data = request.json
-        print("JSON DATA", post_data)
         if auth_header:
             try:
                 auth_token = auth_header.split(" ")[1]
@@ -263,7 +260,7 @@ class SubscriberItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -276,18 +273,18 @@ class SubscriberItemAPI(MethodView):
                 responseObject = {
                     'status': 'success',
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
 # define the API resources
 subscribers_api = SubscriberAPI.as_view('subscribers_api')

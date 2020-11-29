@@ -3,6 +3,7 @@
 
 from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
+import json
 
 from project.server import bcrypt, db
 from project.server.models.User import User, BlacklistToken
@@ -37,20 +38,20 @@ class RegisterAPI(MethodView):
                     'status': 'success',
                     'data': user._asdict()
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             except Exception as e:
                 print(e)
                 responseObject = {
                     'status': 'fail',
                     'message': 'Some error occurred. Please try again.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'User already exists. Please Log in.',
             }
-            return make_response(jsonify(responseObject)), 202
+            return make_response(json.dumps(responseObject, default=str)), 202
 
 
 class LoginAPI(MethodView):
@@ -76,20 +77,20 @@ class LoginAPI(MethodView):
                         'message': 'Successfully logged in.',
                         'auth_token': auth_token.decode()
                     }
-                    return make_response(jsonify(responseObject)), 200
+                    return make_response(json.dumps(responseObject, default=str)), 200
             else:
                 responseObject = {
                     'status': 'fail',
                     'message': 'User does not exist.'
                 }
-                return make_response(jsonify(responseObject)), 404
+                return make_response(json.dumps(responseObject, default=str)), 404
         except Exception as e:
             print(e)
             responseObject = {
                 'status': 'fail',
                 'message': 'Try again'
             }
-            return make_response(jsonify(responseObject)), 500
+            return make_response(json.dumps(responseObject, default=str)), 500
 
 class AdminAPI(MethodView):
     """
@@ -105,7 +106,7 @@ class AdminAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -121,18 +122,18 @@ class AdminAPI(MethodView):
                     'status': 'success',
                     'data': trans_arr
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
     def delete(self):
        """ delete goes here """
@@ -152,7 +153,7 @@ class AdminItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -164,18 +165,18 @@ class AdminItemAPI(MethodView):
                     'status': 'success',
                     'data': user
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
     def put(self):
         """ put an item here """
 
@@ -193,7 +194,7 @@ class AdminItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -213,18 +214,18 @@ class AdminItemAPI(MethodView):
                     'status': 'success',
                     'data': data
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
     def patch(self):
         """ update an item here """
     def delete(self):
@@ -243,7 +244,7 @@ class AdminItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -256,18 +257,18 @@ class AdminItemAPI(MethodView):
                 responseObject = {
                     'status': 'success',
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
 class LogoutAPI(MethodView):
     """
@@ -294,25 +295,25 @@ class LogoutAPI(MethodView):
                         'status': 'success',
                         'message': 'Successfully logged out.'
                     }
-                    return make_response(jsonify(responseObject)), 200
+                    return make_response(json.dumps(responseObject, default=str)), 200
                 except Exception as e:
                     responseObject = {
                         'status': 'fail',
                         'message': e
                     }
-                    return make_response(jsonify(responseObject)), 200
+                    return make_response(json.dumps(responseObject, default=str)), 200
             else:
                 responseObject = {
                     'status': 'fail',
                     'message': resp
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 403
+            return make_response(json.dumps(responseObject, default=str)), 403
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')

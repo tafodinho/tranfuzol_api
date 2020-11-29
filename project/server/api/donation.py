@@ -3,6 +3,7 @@ from flask import Blueprint, request, make_response, jsonify
 from flask.views import MethodView
 from sqlalchemy import inspect
 import datetime
+import json
 
 from project.server import bcrypt, db
 from project.server.models.Donor import Donor
@@ -27,7 +28,7 @@ class DonationAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -36,7 +37,6 @@ class DonationAPI(MethodView):
                 trans_arr = []
                 donations = Donation.query.all()
                 for i in range(len(donations)):
-                    print("DONATIONS I", donations[i]._asdict())
                     trans_arr.append(donations[i]._asdict())
                     trans_arr[i]['hospital'] = donations[i].hospital._asdict()
                     trans_arr[i]['donor'] = donations[i].donor._asdict()
@@ -45,18 +45,18 @@ class DonationAPI(MethodView):
                     'status': 'success',
                     'data': trans_arr
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
     def delete(self):
        """ delete goes here """
@@ -82,7 +82,7 @@ class DonationItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -105,19 +105,19 @@ class DonationItemAPI(MethodView):
                     'status': 'success',
                     'data': data
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
 
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         
     def get(self):
         """ get an by id """
@@ -133,7 +133,7 @@ class DonationItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -146,24 +146,24 @@ class DonationItemAPI(MethodView):
                         'message': 'donation found',
                         'data': donation._asdict()
                     }
-                    return make_response(jsonify(responseObject)), 200
+                    return make_response(json.dumps(responseObject, default=str)), 200
                 else:
                     responseObject = {
                         'status': 'fail',
                         'message': 'donation not found'
                     }
-                    return make_response(jsonify(responseObject)), 402
+                    return make_response(json.dumps(responseObject, default=str)), 402
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
     def put(self):
         """ put an item here """
@@ -181,7 +181,7 @@ class DonationItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -203,18 +203,18 @@ class DonationItemAPI(MethodView):
                     'status': 'success',
                     'data': data
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
     def patch(self):
         """ update an item here """
     def delete(self):
@@ -232,7 +232,7 @@ class DonationItemAPI(MethodView):
                     'status': 'fail',
                     'message': 'Bearer token malformed.'
                 }
-                return make_response(jsonify(responseObject)), 401
+                return make_response(json.dumps(responseObject, default=str)), 401
         else:
             auth_token = ''
         if auth_token:
@@ -245,18 +245,18 @@ class DonationItemAPI(MethodView):
                 responseObject = {
                     'status': 'success',
                 }
-                return make_response(jsonify(responseObject)), 200
+                return make_response(json.dumps(responseObject, default=str)), 200
             responseObject = {
                 'status': 'fail',
                 'message': resp
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
         else:
             responseObject = {
                 'status': 'fail',
                 'message': 'Provide a valid auth token.'
             }
-            return make_response(jsonify(responseObject)), 401
+            return make_response(json.dumps(responseObject, default=str)), 401
 
 # define the API resources
 donations_api = DonationAPI.as_view('donations_api')
