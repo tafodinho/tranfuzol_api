@@ -2,3 +2,4 @@ venv
 migrations
 test/*
 .ebextensions/*
+.python-version
