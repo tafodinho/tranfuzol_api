@@ -28,7 +28,7 @@ class DonorAPI(MethodView):
 
     def get(self):
         # get the auth token
-        print(request.json)
+        print("AUTH", request.headers.get('Authorization'))
         auth_header = request.headers.get('Authorization')
         if auth_header:
             try:

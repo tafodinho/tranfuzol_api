@@ -105,7 +105,6 @@ class Donor(db.Model):
     def _return_data(self):
         from project.server.models.Subscriber import Subscriber
         donor_data = self._asdict()
-        print("TESTING", donor_data)
         donor_data['donations'] = [don._asdict() for don in self.donations]
         for j in range(len(self.donations)):
             donor_data['donations'][j]['hospital'] = self.donations[j].hospital._asdict()

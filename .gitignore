@@ -6,7 +6,7 @@ tmp
 *./
 .python-version
 test/*
-.ebextensions/*
+.ebextensions
 __pycache__
 
 *.pyc
