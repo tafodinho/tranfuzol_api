@@ -3,9 +3,9 @@ env
 venv
 temp
 tmp
+.python-version
 test/*
 .ebextensions/*
-.python-version
 __pycache__
 
 *.pyc
@@ -17,6 +17,7 @@ migrations
 *.idea
 logs.txt
 get-pip.py
+.ebignore
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
