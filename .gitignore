@@ -3,6 +3,7 @@ env
 venv
 temp
 tmp
+*./
 .python-version
 test/*
 .ebextensions/*
