@@ -88,10 +88,12 @@ class DeferralItemAPI(MethodView):
             resp = User.decode_auth_token(auth_token)
             if not isinstance(resp, str):
                 deferral = Deferral()
-                deferral.donor_id = post_data["donor_id"]
-                deferral.reason = post_data["reason"]
-                deferral.ndefbd = post_data["ndefbd"]
 
+                if post_data["permanent_deferal"]:
+                    deferral.ndefbd = datetime.datetime.now() + datetime.timedelta(weeks=52000)
+                else:
+                    deferral.ndefbd = post_data["ndefbd"]
+                deferral.donor_id = int(post_data["donor_id"]["value"])
                 db.session.add(deferral)
                 db.session.commit()
                 deferral.update_donor_ndefbd()
