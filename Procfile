@@ -1,1 +1,1 @@
-web: gunicorn --chdir server/project app:app
+web: uvicorn --chdir manage:application
