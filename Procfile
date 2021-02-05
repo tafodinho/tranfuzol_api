@@ -1,1 +1,1 @@
-web: gunicorn manage:manager
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker --chdir project/server app:app
