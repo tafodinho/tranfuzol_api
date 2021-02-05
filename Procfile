@@ -1,1 +1,1 @@
-web: uvicorn manage:application
+web: unicorn manage:application
