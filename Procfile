@@ -1,1 +1,1 @@
-web: uvicorn --chdir manage:application
+web: uvicorn manage:application
