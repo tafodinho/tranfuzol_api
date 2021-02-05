@@ -1,1 +1,1 @@
-gunicorn --factory --chdir project/server app:app
+gunicorn  manage:application
