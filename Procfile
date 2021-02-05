@@ -1,1 +1,1 @@
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker --chdir project/server app:app
+gunicorn --factory --chdir project/server app:app
