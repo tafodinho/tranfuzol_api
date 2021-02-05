@@ -1,1 +1,1 @@
-from project.server import app as application
+from project.server import app
