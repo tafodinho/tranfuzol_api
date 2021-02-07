@@ -114,4 +114,4 @@ def drop_db():
     db.drop_all()
 
 if __name__ == '__main__':
-    manager.run(host='0.0.0.0')
+    manager.run(host='0.0.0.0', port=os.environ.get('PORT', '5000'))
