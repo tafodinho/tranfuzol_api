@@ -4,8 +4,8 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 database_name = 'transfuzol'
 
-if 'RDS_DB_NAME' in os.environ:
-    DB_NAME = os.environ['RDS_DB_NAME']
+if 'DATABASE_URL' in os.environ:
+    DB_NAME = os.environ['DATABASE_URL']
     DB_USER = os.environ['RDS_USERNAME']
     DB_PASSWORD = os.environ['RDS_PASSWORD']
     DB_HOST = os.environ['RDS_HOSTNAME']
@@ -24,7 +24,7 @@ class BaseConfig:
     DEBUG = False
     BCRYPT_LOG_ROUNDS = 13
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql://' + DB_USER + ':' + DB_PASSWORD + '@' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME
+    SQLALCHEMY_DATABASE_URI = DB_NAME
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
