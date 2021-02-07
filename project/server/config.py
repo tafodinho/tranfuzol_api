@@ -5,17 +5,14 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 database_name = 'transfuzol'
 
 if 'DATABASE_URL' in os.environ:
-    DB_NAME = os.environ['DATABASE_URL']
-    DB_USER = os.environ['RDS_USERNAME']
-    DB_PASSWORD = os.environ['RDS_PASSWORD']
-    DB_HOST = os.environ['RDS_HOSTNAME']
-    DB_PORT = os.environ['RDS_PORT']
+    DB_URL = os.environ['DATABASE_URL']
 else:
     DB_NAME = 'transfuzol'
     DB_USER = 'postgres'
     DB_PASSWORD = 'barister'
     DB_HOST = 'localhost'
     DB_PORT = '5432'
+    DB_URL = 'postgresql://' + DB_USER + ':' + DB_PASSWORD + '@' + DB_HOST + ':' + DB_PORT + '/' + DB_NAME
 
 
 class BaseConfig:
@@ -24,7 +21,7 @@ class BaseConfig:
     DEBUG = False
     BCRYPT_LOG_ROUNDS = 13
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = DB_NAME
+    SQLALCHEMY_DATABASE_URI = DB_URL
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration."""
