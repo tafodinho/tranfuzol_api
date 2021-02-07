@@ -1,1 +1,1 @@
-web: uvicorn --factory manage:application
+web: gunicorn manage:manager
